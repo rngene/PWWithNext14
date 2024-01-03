@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   
-  const { data } = await fetch(
+  const response  = await fetch(
     "https://countries.trevorblades.com/graphql",
     {
       method: "POST",
@@ -22,7 +22,7 @@ export default async function Page() {
     }
   ).then((res) => res.json());
 
-  const countries : Country[] = data.countries;
+  const countries : Country[] = response.data.countries;
 
   return (
     <div>

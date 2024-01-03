@@ -1,4 +1,5 @@
-import { defineConfig, devices } from '@playwright/test'
+import { devices } from '@playwright/test'
+import { defineConfig } from 'next/experimental/testmode/playwright'
 import path from 'path'
 
 // Use process.env.PORT by default and fallback to port 3000
@@ -10,7 +11,7 @@ const baseURL = `http://localhost:${PORT}`
 // Reference: https://playwright.dev/docs/test-configuration
 export default defineConfig({
   // Timeout per test
-  timeout: 30 * 1000,
+  timeout: 30 * 100,
   // Test directory
   testDir: path.join(__dirname, 'e2e'),
   // If a test fails, retry it additional 2 times
@@ -21,7 +22,7 @@ export default defineConfig({
   // Run your local dev server before starting the tests:
   // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
   webServer: {
-    command: 'npm run dev',
+    command: 'npm run dev -- --experimental-test-proxy',
     url: baseURL,
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,
