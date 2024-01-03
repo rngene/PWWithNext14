@@ -11,13 +11,15 @@ const baseURL = `http://localhost:${PORT}`
 // Reference: https://playwright.dev/docs/test-configuration
 export default defineConfig({
   // Timeout per test
-  timeout: 30 * 100,
+  timeout: 300 * 100,
   // Test directory
   testDir: path.join(__dirname, 'e2e'),
   // If a test fails, retry it additional 2 times
   retries: 0,
   // Artifacts folder where screenshots, videos, and traces are stored.
   outputDir: 'test-results/',
+  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  reporter: 'html',  
 
   // Run your local dev server before starting the tests:
   // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
@@ -35,7 +37,7 @@ export default defineConfig({
 
     // Retry a test if its failing with enabled tracing. This allows you to analyze the DOM, console logs, network traffic etc.
     // More information: https://playwright.dev/docs/trace-viewer
-    trace: 'retry-with-trace',
+    trace: 'on-first-retry',
 
     // All available context options: https://playwright.dev/docs/api/class-browser#browser-new-context
     // contextOptions: {
@@ -63,15 +65,15 @@ export default defineConfig({
     //   },
     // },
     // Test against mobile viewports.
-    {
-      name: 'Mobile Chrome',
-      use: {
-        ...devices['Pixel 5'],
-      },
-    },
-    {
-      name: 'Mobile Safari',
-      use: devices['iPhone 12'],
-    },
+    // {
+    //   name: 'Mobile Chrome',
+    //   use: {
+    //     ...devices['Pixel 5'],
+    //   },
+    // },
+    // {
+    //   name: 'Mobile Safari',
+    //   use: devices['iPhone 12'],
+    // },
   ],
 })

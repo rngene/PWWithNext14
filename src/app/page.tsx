@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Countries } from '../components/countries'
 import Country from '../models/country';
+
  
 export const metadata: Metadata = {
   title: 'Countries',

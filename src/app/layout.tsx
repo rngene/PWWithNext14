@@ -1,3 +1,4 @@
+import '../styles/pwwithnext14.css'
 
 export default function RootLayout({
   children,
