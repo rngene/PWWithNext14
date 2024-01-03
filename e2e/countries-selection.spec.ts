@@ -6,11 +6,14 @@ test.describe('Countries selection', async () => {
     test('populates properties correctly', async ({ page, next }) => {
 
         next.onFetch((request) => {
-            const url = new URL(request.url);
-                return createJsonResponse({
-                    data: { countries },
-                });
-            //return 'continue';
+            const testId = request.headers.get("data-testid");
+            if (testId==="getCountries") {
+                const url = new URL(request.url);
+                    return createJsonResponse({
+                        data: { countries },
+                    });
+            }
+            return 'continue';
           });
 
         await page.goto('/');

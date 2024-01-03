@@ -18,6 +18,7 @@ export default async function Page() {
       }),
       headers: {
         "Content-Type": "application/json",
+        "data-testid": "getCountries"
       },
     }
   ).then((res) => res.json());
