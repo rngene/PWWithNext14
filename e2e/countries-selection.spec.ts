@@ -1,43 +1,19 @@
 import { test } from 'next/experimental/testmode/playwright';
+import { createJsonResponse } from './test-utils';
+import { countries } from './mocks/countries';
 
-//test.describe('Countries selection', async () => {
+test.describe('Countries selection', async () => {
     test('populates properties correctly', async ({ page, next }) => {
-
-        const mock=`{
-            "data": {
-              "countries": [
-                {
-                  "name": "Country1",
-                  "code": "C1"
-                }
-              ]
-            }
-          }`;
 
         next.onFetch((request) => {
             const url = new URL(request.url);
-            //if (url.pathname === '/graphql') {
-                return new Response(JSON.stringify({
-                    data: {
-                        countries: [
-                            {
-                                name: "Country1",
-                                code: "C1"
-                            }                            
-                        ]
-                    },
-                  }), {
-                  headers: {
-                    'content-type': 'application/json',
-                  }
-                }
-                );
-            //}
-      
+                return createJsonResponse({
+                    data: { countries },
+                });
             //return 'continue';
           });
 
         await page.goto('/');
         await page.getByTestId('country-select').selectOption('C1');
     });
-//});
+});
