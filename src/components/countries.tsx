@@ -15,15 +15,21 @@ function getCountryQuery(countryCode : string) {
 
 export function Countries(props : CountriesProps) { 
 
+
   const [countryCode, setCountryCode] = useState<string>(props.countryListItems[0].code);
   const [countryDetails, setCountryDetails] = useState<CountryDetails|null>(null); 
   const [hasErrors, setHasErrors] = useState(false);
+  const [cache, setCache] = useState<{[key: string]: CountryDetails}>({});
 
   function countryChangeHandler(selectedOption: React.ChangeEvent<HTMLSelectElement>)  {
     setCountryCode(selectedOption.target.value);
   };   
   
   async function  getDetailsClickHandler() {
+    if (cache[countryCode]) {
+      setCountryDetails(cache[countryCode]);
+      return;
+    }
     setHasErrors(false);
         var response = await fetch(
           "https://countries.trevorblades.com/graphql",
@@ -53,7 +59,10 @@ export function Countries(props : CountriesProps) {
         if (!response?.data?.country) {
           setHasErrors(true);
         } else {
-          setCountryDetails(response.data.country);
+          const ctryDetails=response.data.country;
+          setCountryDetails(ctryDetails);
+          cache[countryCode] = ctryDetails;
+          setCache(cache);
         }
   }
 
