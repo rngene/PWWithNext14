@@ -24,35 +24,40 @@ export const Countries = (props : CountriesProps) => {
   };   
   
   const getDetailsClickHandler = async () => {
+    
     setHasErrors(false);
+        var response = await fetch(
+          "https://countries.trevorblades.com/graphql",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              query: `query Country($id: ID!) {
+                    country(code: $id) {
+                    capital
+                    currency
+                  }
+                }`,
+              variables: {id:`${countryCode}`}   
+            }),
+            headers: {
+              "Content-Type": "application/json",
+              "data-testid": "getCountryDetails"
+            },
+          }
+        ).then((res) => {
+          if (res.status!==200) {
+            setHasErrors(true);
+          }
+          return res.json();
+        });
 
-    var response = await fetch(
-      "https://countries.trevorblades.com/graphql",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          query: `query Country($id: ID!) {
-                country(code: $id) {
-                capital
-                currency
-              }
-            }`,
-          variables: {id:`${countryCode}`}   
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          "data-testid": "getCountryDetails"
-        },
-      }
-    ).then((res) => {
-      if (res.status!==200) {
-        setHasErrors(true);
-      }
-      return res.json();
-    });
-
-    setCountryDetails(response.data.country);
+        if (!response?.data?.country) {
+          setHasErrors(true);
+        } else {
+          setCountryDetails(response.data.country);
+        }
   }
+
 
   return <div className="main">
       <label data-testid='country-label'>Country</label>
