@@ -13,18 +13,17 @@ function getCountryQuery(countryCode : string) {
   `
 }
 
-export const Countries = (props : CountriesProps) => { 
+export function Countries(props : CountriesProps) { 
 
   const [countryCode, setCountryCode] = useState<string>(props.countryListItems[0].code);
   const [countryDetails, setCountryDetails] = useState<CountryDetails|null>(null); 
   const [hasErrors, setHasErrors] = useState(false);
 
-  const countryChangeHandler = (selectedOption: React.ChangeEvent<HTMLSelectElement>)  => {
+  function countryChangeHandler(selectedOption: React.ChangeEvent<HTMLSelectElement>)  {
     setCountryCode(selectedOption.target.value);
   };   
   
-  const getDetailsClickHandler = async () => {
-    
+  async function  getDetailsClickHandler() {
     setHasErrors(false);
         var response = await fetch(
           "https://countries.trevorblades.com/graphql",
