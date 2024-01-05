@@ -5,3 +5,12 @@ export function createJsonResponse(body: object): Response {
       },
     });
   }
+
+  export function createJsonResponseWithStatus(body: object, status: number): Response {
+    return new Response(JSON.stringify(body), {
+      headers: {
+        'content-type': 'application/json',
+      },
+      status: status
+    });
+  }

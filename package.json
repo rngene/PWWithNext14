@@ -4,7 +4,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "pw-trace": "playwright test --trace on",
+    "pw-ui": "playwright test --ui",
+    "pw-report": "npx playwright show-report",
+    "pw-debug": "npx playwright test --debug"
   },
   "dependencies": {
     "next": "14.0.4",
