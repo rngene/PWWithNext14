@@ -5,8 +5,10 @@ import { countryDetails } from './mocks/countryDetails';
 
 test.describe('Countries selection', async () => {
     test('populates properties correctly', async ({ page, next }) => {
+        let requestBody=null;
 
-        next.onFetch((request) => {
+        next.onFetch(async (request) => {
+         
             const testId = request.headers.get("data-testid");
             if (testId==="getCountries") {
                 return createJsonResponse({
@@ -14,9 +16,11 @@ test.describe('Countries selection', async () => {
                 });
             }
             if (testId==="getCountryDetails") {
+                requestBody = await request.json();
                 return createJsonResponse({
                     data: { country: countryDetails },
                 });
+
             }            
             return 'continue';
           });
@@ -24,6 +28,7 @@ test.describe('Countries selection', async () => {
         await page.goto('/');
         await page.getByTestId('country-select').selectOption('C2');
         await page.getByTestId('submit-button').click();
+        expect(requestBody?.variables?.id).toBe('C2');
 
         await expect(page.getByTestId('capital-label')).toHaveText('test capital');
         await expect(page.getByTestId('currency-label')).toHaveText('test currency');        
