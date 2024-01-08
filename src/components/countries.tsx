@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Country from "../models/country"
 import CountryDetails from "../models/countryDetails";
+import { fetchFromCountriesGraph } from "../lib/fetcher";
 
 export interface CountriesProps {
     countryListItems: Country[]
@@ -31,39 +32,32 @@ export function Countries(props : CountriesProps) {
       return;
     }
     setHasErrors(false);
-        var response = await fetch(
-          "https://countries.trevorblades.com/graphql",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              query: `query Country($id: ID!) {
-                    country(code: $id) {
-                    capital
-                    currency
-                  }
-                }`,
-              variables: {id:`${countryCode}`}   
-            }),
-            headers: {
-              "Content-Type": "application/json",
-              "data-testid": "getCountryDetails"
-            },
-          }
-        ).then((res) => {
-          if (res.status!==200) {
-            setHasErrors(true);
-          }
-          return res.json();
-        });
 
-        if (!response?.data?.country) {
-          setHasErrors(true);
-        } else {
-          const ctryDetails=response.data.country;
-          setCountryDetails(ctryDetails);
-          cache[countryCode] = ctryDetails;
-          setCache(cache);
-        }
+    var response = await fetchFromCountriesGraph({
+          query: `query Country($id: ID!) {
+                country(code: $id) {
+                capital
+                currency
+              }
+            }`,
+          variables: {id:`${countryCode}`}   
+        },
+        'getCountryDetails'
+    ).then((res) => {
+      if (res.status!==200) {
+        setHasErrors(true);
+      }
+      return res.json();
+    });
+
+    if (!response?.data?.country) {
+      setHasErrors(true);
+    } else {
+      const ctryDetails=response.data.country;
+      setCountryDetails(ctryDetails);
+      cache[countryCode] = ctryDetails;
+      setCache(cache);
+    }
   }
 
 
