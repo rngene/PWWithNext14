@@ -8,15 +8,7 @@ export interface CountriesProps {
     countryListItems: Country[]
 }
 
-function getCountryQuery(countryCode : string) {
-  return `
-  {"query":"query ($code: ID!) {\n  country(code: $code) {\n    capital\n    currency\n  }\n}","variables":{"code":"US"}}
-  `
-}
-
 export function Countries(props : CountriesProps) { 
-
-
   const [countryCode, setCountryCode] = useState<string>(props.countryListItems[0].code);
   const [countryDetails, setCountryDetails] = useState<CountryDetails|null>(null); 
   const [hasErrors, setHasErrors] = useState(false);
@@ -60,8 +52,7 @@ export function Countries(props : CountriesProps) {
     }
   }
 
-
-  return <div className="main">
+return <div className="main">
       <label data-testid='country-label'>Country</label>
       <span>
         <select onChange={countryChangeHandler}  data-testid='country-select'>
