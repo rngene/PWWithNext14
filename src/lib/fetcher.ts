@@ -6,8 +6,10 @@ export async function fetchFromCountriesGraph(body: object, testId: string) : Pr
           body: JSON.stringify(body),
           headers: {
             "Content-Type": "application/json",
-            "data-testid": testId
+            "data-testid": testId,
+            "cache": "no-store" 
           },
-        }
+        },
+       
       )    
 }
