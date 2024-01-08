@@ -4,8 +4,8 @@ import { countries } from './mocks/countries';
 import { countryDetails } from './mocks/countryDetails';
 
 test.describe('Countries selection', async () => {
-    test('populates properties correctly', async ({ page, next }) => {
-        let requestBody=null;
+    test('countries dropdown popualtes and selects correctly', async ({ page, next }) => {
+        let requestBody : { variables: object} | null = null;
 
         next.onFetch(async (request) => {
          
@@ -26,9 +26,12 @@ test.describe('Countries selection', async () => {
           });
 
         await page.goto('/');
-        await page.getByTestId('country-select').selectOption('C2');
+        const countryDropdown = page.getByTestId('country-select');
+        await countryDropdown.selectOption({label: 'Test country 1'});
+        await expect(countryDropdown).toHaveValue('C1');        
+        await countryDropdown.selectOption('C2');
         await page.getByTestId('submit-button').click();
-        expect(requestBody?.variables?.id).toBe('C2');
+        expect((requestBody as any).variables.id).toBe('C2');
 
         await expect(page.getByTestId('capital-label')).toHaveText('test capital');
         await expect(page.getByTestId('currency-label')).toHaveText('test currency');        
@@ -50,6 +53,7 @@ test.describe('Countries selection', async () => {
             return 'continue';
           });
           await page.goto('/');
+
           await page.getByTestId('country-select').selectOption('C2');
           await page.getByTestId('submit-button').click();
           await expect(page.getByTestId('error-label')).toBeVisible();
@@ -81,8 +85,6 @@ test.describe('Countries selection', async () => {
         let numberOfGraphInvocations = 0;
 
         next.onFetch(async (request) => {
-
-         
             const testId = request.headers.get("data-testid");
             if (testId==="getCountries") {
                 return createJsonResponse({
@@ -94,7 +96,6 @@ test.describe('Countries selection', async () => {
                 return createJsonResponse({
                     data: { country: countryDetails },
                 });
-
             }            
             return 'continue';
           });
