@@ -9,7 +9,6 @@ export async function fetchFromCountriesGraph(body: object, testId: string) : Pr
             "data-testid": testId,
             "cache": "no-store" 
           },
-        },
-       
+        }
       )    
 }
