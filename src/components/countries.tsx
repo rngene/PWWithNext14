@@ -65,8 +65,8 @@ export function Countries(props : CountriesProps) {
          :
          countryDetails ?
             <>
-                <label data-testid='capital-label'>Capital</label><label className='result' data-testid='capital-value-label'>{countryDetails?.capital}</label>  
-                <label data-testid='currency-label'>Currency</label><label className='result' data-testid='currency-value-label'>{countryDetails?.currency}</label>   
+                <label data-testid='capital-label'>Capital</label><label className='result' data-testid='capital-value-label'>{countryDetails.capital}</label>  
+                <label data-testid='currency-label'>Currency</label><label className='result' data-testid='currency-value-label'>{countryDetails.currency}</label>   
             </>      
         : <></>
        }
