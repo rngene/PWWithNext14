@@ -1,14 +1,26 @@
 import type { Metadata } from 'next'
+import { Countries } from '../components/countries'
+import { fetchFromCountriesGraph } from '../lib/fetcher';
+import Country from '../models/country';
 
  
 export const metadata: Metadata = {
-
+  title: 'Countries of the world'
 }
 
 export default async function Page() {
   
- 
+  const response  = await fetchFromCountriesGraph({
+    query: '{ countries { name, code } }',
+  }, 
+  'getCountries').then((res) => res.json());
 
-  return ( <></>
+const countries : Country[] = response.data.countries;  
+ 
+  return ( 
+    <div>
+      <h1>Countries of the world</h1>
+      <Countries countryListItems={countries}></Countries>
+    </div>
   )
 }
