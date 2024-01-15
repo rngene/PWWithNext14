@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { Countries } from '../components/countries'
-import { fetchFromCountriesGraph } from '../lib/fetcher';
 import Country from '../models/country';
+import { fetchFromCountriesGraph } from '../lib/fetcher';
+
 
  
 export const metadata: Metadata = {
