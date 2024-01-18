@@ -14,5 +14,6 @@ export function Countries(props: CountriesProps) {
                 })}
             </select>
         </span>
+        <input type='button' value='Get Details' data-testid='submit-button'></input>
     </div>
 }
