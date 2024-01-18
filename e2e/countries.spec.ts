@@ -1,5 +1,5 @@
 import { test, expect } from 'next/experimental/testmode/playwright';
-import { createJsonResponse } from './test-utils';
+import { createJsonResponse, createJsonResponseWithStatus } from './test-utils';
 import { countries } from './mocks/countries';
 import { countryDetails } from './mocks/countryDetails';
 
@@ -45,4 +45,28 @@ test.describe('Country selection', () =>{
         await expect(page.getByTestId('capital-value-label')).toHaveText('test capital');
         await expect(page.getByTestId('currency-value-label')).toHaveText('test currency');
     });
+
+    test('shows error when graph call fails', async({ page ,next}) => {
+
+        next.onFetch(async (request) => { 
+            const testId = request.headers.get("data-testid");
+            if (testId==="getCountries") {
+                return createJsonResponse({
+                    data: { countries },
+                });            
+            }
+            if (testId==="getCountryDetails") {
+                return createJsonResponseWithStatus({
+                    data: { },
+                }, 500);            
+            }            
+        });            
+
+        await page.goto('/');
+
+        await page.getByTestId('country-select').selectOption('C2');
+        await page.getByTestId('submit-button').click();
+
+        await expect(page.getByTestId('error-label')).toBeVisible();
+    });    
 })

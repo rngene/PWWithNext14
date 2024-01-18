@@ -43,6 +43,7 @@ export function Countries(props: CountriesProps) {
             </select>
         </span>
         <input type='button' value='Get Details' data-testid='submit-button' onClick={getDetailsClickHandler}></input>
+        <label className='error' data-testid='error-label'>Sorry an error has ocurred</label>
         {countryDetails? 
             <>
                 <label data-testid='capital-label'>Capital</label><label className='result' data-testid='capital-value-label'>{countryDetails?.capital}</label>
