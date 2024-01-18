@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { Countries } from '../components/countries'
+import { fetchFromCountriesGraph } from '../lib/fetcher';
+import Country from '../models/country';
 
  
 export const metadata: Metadata = {
@@ -9,10 +11,15 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   
- 
+  const response  = await fetchFromCountriesGraph({
+    query: '{ countries { name, code } }',
+  }, 
+  'getCountries').then((res) => res.json());
+
+  const countries : Country[] = response.data.countries; 
 
   return ( <div>
-    <Countries></Countries>
+    <Countries countryListItems={countries}></Countries>
   </div>
   )
 }
