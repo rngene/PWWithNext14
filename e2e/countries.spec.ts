@@ -37,6 +37,7 @@ test.describe('Country selection', () =>{
         });            
 
         await page.goto('/');
+        await expect(page.getByTestId('capital-label')).not.toBeVisible();
         await page.getByTestId('country-select').selectOption('C2');
         await page.getByTestId('submit-button').click();
         expect((requestBody as any).variables.id).toBe('C2');
