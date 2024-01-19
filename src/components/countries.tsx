@@ -3,6 +3,7 @@ import { useState } from "react"
 import Country from "../models/country"
 import CountryDetails from "../models/countryDetails";
 import { fetchFromCountriesGraph } from "../lib/fetcher";
+import CountryDetails from "../models/countryDetails";
 
 export interface CountriesProps {
     countryListItems: Country[]
@@ -12,12 +13,17 @@ export function Countries(props: CountriesProps) {
     const [countryCode, setCountryCode] = useState('');
     const [countryDetails, setCountryDetails] = useState<CountryDetails|null>(null);
     const [hasErrors, setHasErrors] = useState(false);
+    const [cache, setCache] = useState<{[key:string] : CountryDetails}>({});
 
     function countryChangeHandler(selectedOption: React.ChangeEvent<HTMLSelectElement>)  {
         setCountryCode(selectedOption.target.value);
     }; 
     
     async function getDetailsClickHandler() {
+        if (cache[countryCode]) {
+            setCountryDetails(cache[countryCode]);
+            return;
+        }
         var response = await fetchFromCountriesGraph({
             query: `query Country($id: ID!) {
                 country(code: $id) {
@@ -34,7 +40,8 @@ export function Countries(props: CountriesProps) {
             return res.json();
         });
         const ctryDetails = response.data.country;
-        setCountryDetails(ctryDetails);        
+        setCountryDetails(ctryDetails);
+        cache[countryCode] = ctryDetails;
     }
     
     return <div className="main">

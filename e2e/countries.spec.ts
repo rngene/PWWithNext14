@@ -37,7 +37,7 @@ test.describe('Country selection', () => {
         await page.goto('/');
         await expect(page.getByTestId('capital-label')).not.toBeVisible();
         await expect(page.getByTestId('error-label')).not.toBeVisible();
-        
+
         await page.getByTestId('country-select').selectOption('C2');
         await page.getByTestId('submit-button').click();
         expect((requestBody as any).variables.id).toBe('C2');
@@ -65,6 +65,29 @@ test.describe('Country selection', () => {
         await page.getByTestId('submit-button').click();
         await expect(page.getByTestId('error-label')).toBeVisible();
     });    
+    test('caches graph call', async ({page, next}) => {
+        let numberOfGraphInvocations = 0;
+        next.onFetch(async (request) => { 
+            const testId = request.headers.get("data-testid");
+            if (testId==='getCountries') {
+                return createJsonResponse({
+                    data: { countries },
+                });
+            }
+            if (testId==='getCountryDetails') {
+                numberOfGraphInvocations++;
+                return createJsonResponse({
+                    data: { country: countryDetails },
+                });
+            }            
+        });            
+        await page.goto('/');
+        
+        await page.getByTestId('country-select').selectOption('C2');
+        await page.getByTestId('submit-button').click();
+        await page.getByTestId('submit-button').click();
+        expect(numberOfGraphInvocations).toBe(1);
 
+    });
 
 })
