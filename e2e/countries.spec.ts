@@ -33,9 +33,11 @@ test.describe('Country selection', () => {
             }            
         });            
         await page.goto('/');
+        await expect(page.getByTestId('capital-label')).not.toBeVisible();
         await page.getByTestId('country-select').selectOption('C2');
         await page.getByTestId('submit-button').click();
         await expect(page.getByTestId('capital-value-label')).toHaveText('test capital');
+        await expect(page.getByTestId('currency-value-label')).toHaveText('test currency');
 
     })
 })
