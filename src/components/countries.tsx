@@ -9,7 +9,7 @@ export interface CountriesProps {
 }
 
 export function Countries(props: CountriesProps) {
-    const [countryCode, setCountryCode] = useState('');
+    const [countryCode, setCountryCode] = useState(props.countryListItems[0].code);
     const [countryDetails, setCountryDetails] = useState<CountryDetails|null>(null);
     const [hasErrors, setHasErrors] = useState(false);
     const [cache, setCache] = useState<{[key:string] : CountryDetails}>({});

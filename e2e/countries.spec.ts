@@ -93,5 +93,27 @@ test.describe('Country selection', () =>{
         await page.getByTestId('submit-button').click();
         await page.getByTestId('submit-button').click();
         expect(numberOfGraphInvocations).toBe(1);
-    });      
+    });  
+    
+    test('defaults to first country', async({ page ,next}) => {
+        let requestBody: { variables: object} | null = null;
+        next.onFetch(async (request) => { 
+            const testId = request.headers.get("data-testid");
+            if (testId==="getCountries") {
+                return createJsonResponse({
+                    data: { countries },
+                });            
+            }
+            if (testId==="getCountryDetails") {
+                requestBody = await request.json();
+                return createJsonResponse({
+                    data: { country: countryDetails },
+                });            
+            }            
+        });            
+
+        await page.goto('/');
+        await page.getByTestId('submit-button').click();
+        expect((requestBody as any).variables.id).toBe('C1');
+    });    
 })
