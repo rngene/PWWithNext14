@@ -35,6 +35,7 @@ test.describe('Country selection', () => {
         await page.goto('/');
         await page.getByTestId('country-select').selectOption('C2');
         await page.getByTestId('submit-button').click();
+        await expect(page.getByTestId('capital-value-label')).toHaveText('test capital');
 
     })
 })
