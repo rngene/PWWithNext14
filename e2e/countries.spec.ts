@@ -19,6 +19,7 @@ test.describe('Countries page content', () => {
 
 test.describe('Country selection', () => {
     test('country dropdown selects and polulates infor correctly', async ({page, next}) => {
+        let requestBody: { variables: object} | null = null;
         next.onFetch(async (request) => { 
             const testId = request.headers.get("data-testid");
             if (testId==='getCountries') {
@@ -27,6 +28,7 @@ test.describe('Country selection', () => {
                 });
             }
             if (testId==='getCountryDetails') {
+                requestBody = await request.json();
                 return createJsonResponse({
                     data: { country: countryDetails },
                 });
@@ -36,6 +38,8 @@ test.describe('Country selection', () => {
         await expect(page.getByTestId('capital-label')).not.toBeVisible();
         await page.getByTestId('country-select').selectOption('C2');
         await page.getByTestId('submit-button').click();
+        expect((requestBody as any).variables.id).toBe('C2');
+        
         await expect(page.getByTestId('capital-value-label')).toHaveText('test capital');
         await expect(page.getByTestId('currency-value-label')).toHaveText('test currency');
 

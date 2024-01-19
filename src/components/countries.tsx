@@ -45,7 +45,7 @@ export function Countries(props: CountriesProps) {
         <input type='button' value='Get Details' data-testid='submit-button' onClick={getDetailsClickHandler}></input>
         {countryDetails ? <>
             <label data-testid='capital-label'>Capital</label><label className='result' data-testid='capital-value-label'>{countryDetails?.capital}</label>
-            <label>Currency</label><label className='result' data-testid='currency-value-label'>{countryDetails?.currency}</label>
+             <label>Currency</label><label className='result' data-testid='currency-value-label'>{countryDetails?.currency}</label>
             </>:
         <></>}
 
