@@ -11,12 +11,18 @@ export interface CountriesProps {
 export function Countries(props: CountriesProps) {
     const [countryCode, setCountryCode] = useState('');
     const [countryDetails, setCountryDetails] = useState<CountryDetails|null>(null);
+    const [hasErrors, setHasErrors] = useState(false);
+    const [cache, setCache] = useState<{[key:string] : CountryDetails}>({});
 
     function countryChangeHandler(selectedOption: React.ChangeEvent<HTMLSelectElement>)  {
         setCountryCode(selectedOption.target.value);
     }; 
     
     async function getDetailsClickHandler() {
+        if (cache[countryCode]) {
+            setCountryDetails(cache[countryCode]);
+            return;
+        }
         var response = await fetchFromCountriesGraph({
             query: `query Country($id: ID!) {
                 country(code: $id) {
@@ -25,12 +31,17 @@ export function Countries(props: CountriesProps) {
               }
             }`,
             variables: {id:`${countryCode}`}             
-        },'getCountryDetails').then((res) => {      
+        },'getCountryDetails').then((res) => {    
+            if (res.status!==200)  {
+                setHasErrors(true);
+            }
             return res.json();
         });
         
         const ctryDetails = response.data.country;
         setCountryDetails(ctryDetails);
+        cache[countryCode] = ctryDetails;
+        setCache(cache);
     }
     
     return <div className="main">
@@ -43,8 +54,9 @@ export function Countries(props: CountriesProps) {
             </select>
         </span>
         <input type='button' value='Get Details' data-testid='submit-button' onClick={getDetailsClickHandler}></input>
-        <label className='error' data-testid='error-label'>Sorry an error has ocurred</label>
-        {countryDetails? 
+        { hasErrors ? <label className='error' data-testid='error-label'>Sorry an error has ocurred</label> 
+        :
+            countryDetails? 
             <>
                 <label data-testid='capital-label'>Capital</label><label className='result' data-testid='capital-value-label'>{countryDetails?.capital}</label>
                 <label>Currency</label><label className='result' data-testid='currency-value-label'>{countryDetails?.currency}</label>        
