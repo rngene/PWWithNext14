@@ -37,6 +37,11 @@ export function Countries(props: CountriesProps) {
             }
             return res.json();
         });
+
+        if (!response?.data?.country) {
+            setHasErrors(true);
+            return;
+        }
         
         const ctryDetails = response.data.country;
         setCountryDetails(ctryDetails);

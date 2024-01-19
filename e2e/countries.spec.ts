@@ -115,5 +115,29 @@ test.describe('Country selection', () =>{
         await page.goto('/');
         await page.getByTestId('submit-button').click();
         expect((requestBody as any).variables.id).toBe('C1');
-    });    
+    }); 
+    
+    test('shows error when graph response is invalid', async({ page ,next}) => {
+
+        next.onFetch(async (request) => { 
+            const testId = request.headers.get("data-testid");
+            if (testId==="getCountries") {
+                return createJsonResponse({
+                    data: { countries },
+                });            
+            }
+            if (testId==="getCountryDetails") {
+                return createJsonResponse({
+                    data: { },
+                });            
+            }            
+        });            
+
+        await page.goto('/');
+
+        await page.getByTestId('country-select').selectOption('C2');
+        await page.getByTestId('submit-button').click();
+
+        await expect(page.getByTestId('error-label')).toBeVisible();
+    });     
 })
