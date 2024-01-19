@@ -7,11 +7,14 @@ export interface CountriesProps {
 export function Countries(props: CountriesProps) {
     return <div className="main">
         <label data-testid='country-label'>Country</label>
-        <select data-testid='country-select'> {
-            props.countryListItems.map(c => {
-                return <option key={c.code} value={c.code}>{c.name}</option>
-            })
-        }
-        </select>
+        <span>
+            <select data-testid='country-select'> {
+                props.countryListItems.map(c => {
+                    return <option key={c.code} value={c.code}>{c.name}</option>
+                })
+            }
+            </select>
+        </span>
+        <input type='button' value='Get Details' data-testid='submit-button'></input>
     </div>
 }
