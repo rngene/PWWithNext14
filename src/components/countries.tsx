@@ -3,14 +3,13 @@ import { useState } from "react"
 import Country from "../models/country"
 import CountryDetails from "../models/countryDetails";
 import { fetchFromCountriesGraph } from "../lib/fetcher";
-import CountryDetails from "../models/countryDetails";
 
 export interface CountriesProps {
     countryListItems: Country[]
 }
 
 export function Countries(props: CountriesProps) {
-    const [countryCode, setCountryCode] = useState('');
+    const [countryCode, setCountryCode] = useState(props.countryListItems[0].code);
     const [countryDetails, setCountryDetails] = useState<CountryDetails|null>(null);
     const [hasErrors, setHasErrors] = useState(false);
     const [cache, setCache] = useState<{[key:string] : CountryDetails}>({});
