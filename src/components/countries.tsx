@@ -9,7 +9,7 @@ export function Countries(props: CountriesProps) {
         <label data-testid='country-label'>Country</label>
         <select data-testid='country-select'> {
             props.countryListItems.map(c => {
-                return <option key={c.code}>{c.name}</option>
+                return <option key={c.code} value={c.code}>{c.name}</option>
             })
         }
         </select>
